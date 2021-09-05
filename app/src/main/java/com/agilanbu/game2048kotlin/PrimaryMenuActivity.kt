@@ -1,13 +1,16 @@
-package com.example.game2048agilanbu
+package com.agilanbu.game2048kotlin
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
+import android.graphics.Typeface
 import android.preference.PreferenceManager
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.PopupMenu
+import androidx.core.content.res.ResourcesCompat
 
 
 class PrimaryMenuActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListener {
@@ -16,15 +19,23 @@ class PrimaryMenuActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_menu)
         mIsMainMenu = true
+        init()
+    }
 
-//        Typeface ClearSans_Bold = Typeface.createFromAsset(getResources().getAssets(), "ClearSans-Bold.ttf");
+    fun init() {
         val bt4x4 = findViewById<Button>(R.id.btn_start_4x4)
         val bt5x5 = findViewById<Button>(R.id.btn_start_5x5)
         val bt6x6 = findViewById<Button>(R.id.btn_start_6x6)
-
-        /*bt4x4.setTypeface(ClearSans_Bold);
-        bt5x5.setTypeface(ClearSans_Bold);
-        bt6x6.setTypeface(ClearSans_Bold);*/
+        try {
+            val typeface = ResourcesCompat.getFont(this@PrimaryMenuActivity, R.font.pcsenior)
+//            val typeface = Typeface.createFromAsset(resources.assets, "ClearSans-Bold.ttf")
+//            val typeface = ResourcesCompat.getFont(this@PrimaryMenuActivity, R.font.opensans_semibold)
+            bt4x4.setTypeface(typeface)
+            bt5x5.setTypeface(typeface)
+            bt6x6.setTypeface(typeface)
+        } catch (w: Exception) {
+            w.printStackTrace()
+        }
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -45,26 +56,12 @@ class PrimaryMenuActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             R.id.btn_start_4x4 -> StartGame(4)
             R.id.btn_start_5x5 -> StartGame(5)
             R.id.btn_start_6x6 -> StartGame(6)
-            R.id.btn_show_achievements -> {
-            }
-            R.id.btn_show_leaderboards -> {
-            }
-            R.id.btn_share -> {
-            }
-            R.id.btn_more_games -> {
-            }
-            R.id.btn_rate -> {
-            }
-            R.id.btn_social_instagram -> {
-            }
             R.id.btn_settings -> {
                 val popup = PopupMenu(this, view)
                 popup.setOnMenuItemClickListener(this) // to implement on click event on items of menu
                 val inflater = popup.menuInflater
                 inflater.inflate(R.menu.menus, popup.menu)
                 popup.show()
-            }
-            R.id.btn_send_email -> {
             }
         }
     }
@@ -101,6 +98,7 @@ class PrimaryMenuActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         var mIsMainMenu = true
         var rows = 4
             private set
+
         @JvmField
         var mBackgroundColor = 0
 

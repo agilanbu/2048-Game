@@ -1,4 +1,4 @@
-package com.example.game2048agilanbu
+package com.agilanbu.game2048kotlin
 
 import org.junit.Test
 

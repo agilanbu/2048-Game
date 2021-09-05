@@ -1,4 +1,4 @@
-package com.example.game2048agilanbu;
+package com.agilanbu.game2048kotlin;
 
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
@@ -17,7 +17,7 @@ class ColorPlatActivity : AppCompatActivity(), OnSeekBarChangeListener {
     private var mSeekBarBlue: SeekBar? = null
 
     // Game view
-    private var mGameView: MainView? = null
+    private var mGameView: PrimaryView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_color_picker)
@@ -25,7 +25,7 @@ class ColorPlatActivity : AppCompatActivity(), OnSeekBarChangeListener {
         mSeekBarRed = findViewById(R.id.seekbar_red)
         mSeekBarGreen = findViewById(R.id.seekbar_green)
         mSeekBarBlue = findViewById(R.id.seekbar_blue)
-        mGameView = MainView(this)
+        mGameView = PrimaryView(this)
         val params = FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.MATCH_PARENT,
             FrameLayout.LayoutParams.MATCH_PARENT

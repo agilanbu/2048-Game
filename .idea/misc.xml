@@ -4,7 +4,21 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/drawable-v24/background_rectangle.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/drawable-v24/cell_rectangle_1024.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/drawable-v24/cell_rectangle_128.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/drawable-v24/cell_rectangle_2.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/drawable-v24/cell_rectangle_256.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/drawable-v24/cell_rectangle_32.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/drawable-v24/cell_rectangle_4.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/drawable-v24/cell_rectangle_8.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/drawable-v24/fade_rectangle.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/drawable-v24/gridcell_rectangle.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/drawable-v24/gridcell_rectangle_16.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/drawable-v24/light_up_rectangle.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/drawable/ic_my_settings.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/layout/activity_color_picker.xml" value="0.1796875" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/layout/activity_game.xml" value="0.16893115942028986" />
+        <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/layout/activity_main_menu.xml" value="0.16893115942028986" />
         <entry key="..\:/Users/admin/AndroidStudioProjects/Game2048Agilanbu/app/src/main/res/menu/menus.xml" value="0.1796875" />
       </map>
     </option>

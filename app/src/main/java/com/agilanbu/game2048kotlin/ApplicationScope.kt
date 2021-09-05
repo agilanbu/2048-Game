@@ -1,8 +1,7 @@
-package com.example.game2048agilanbu
+package com.agilanbu.game2048kotlin
 
 import android.app.Application
 import android.app.ActivityManager
-import android.app.ActivityManager.RunningAppProcessInfo
 import android.os.Process
 import java.lang.Exception
 import java.lang.RuntimeException

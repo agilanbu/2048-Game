@@ -1,4 +1,4 @@
-package com.example.game2048agilanbu
+package com.agilanbu.game2048kotlin
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

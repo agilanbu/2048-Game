@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.game2048agilanbu">
+    package="com.agilanbu.game2048kotlin">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".ApplicationScope"
+        android:name="com.agilanbu.game2048kotlin.ApplicationScope"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,7 +16,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         <activity
-            android:name=".PrimaryMenuActivity"
+            android:name="com.agilanbu.game2048kotlin.PrimaryMenuActivity"
             android:screenOrientation="portrait"
             tools:ignore="IntentFilterExportedReceiver">
             <intent-filter>
@@ -27,11 +27,11 @@
         </activity>
 
         <activity
-            android:name=".PrimaryActivity"
+            android:name="com.agilanbu.game2048kotlin.PrimaryActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".ColorPlatActivity"
+            android:name="com.agilanbu.game2048kotlin.ColorPlatActivity"
             android:label="@string/color_picker"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
     </application>

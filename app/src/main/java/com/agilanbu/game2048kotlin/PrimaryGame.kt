@@ -1,4 +1,4 @@
-package com.example.game2048agilanbu
+package com.agilanbu.game2048kotlin
 
 import android.app.AlertDialog
 import android.content.Context
@@ -6,42 +6,42 @@ import android.preference.PreferenceManager
 import android.widget.Toast
 import java.util.*
 
-class PrimaryGame(private val mContext: Context, private val mView: MainView) {
+class PrimaryGame(private val mContext: Context, private val mView: PrimaryView) {
     @JvmField
-    var gameState = GAME_NORMAL
+    var mGameState = GAME_NORMAL
     @JvmField
-    var lastGameState = GAME_NORMAL
-    private var bufferGameState = GAME_NORMAL
+    var mLastGameState = GAME_NORMAL
+    private var mBufferGameState = GAME_NORMAL
     @JvmField
-    var grid: GridItems? = null
+    var mGrid: GridItems? = null
     @JvmField
     var aGrid: AnimGridItems? = null
     @JvmField
-    var canUndo = false
+    var mCanUndo = false
     @JvmField
-    var score: Long = 0
+    var mScore: Long = 0
     @JvmField
-    var highScore: Long = 0
+    var mHighScore: Long = 0
     @JvmField
-    var lastScore: Long = 0
+    var mLastScore: Long = 0
     private var bufferScore: Long = 0
     fun newGame() {
         val rows: Int = PrimaryMenuActivity.rows
-        if (grid == null) grid = GridItems(rows, rows) else {
+        if (mGrid == null) mGrid = GridItems(rows, rows) else {
             prepareUndoState()
             saveUndoState()
-            grid!!.clearGrid()
+            mGrid!!.clearGrid()
         }
         aGrid = AnimGridItems(rows, rows)
-        highScore = getHighScore()
-        if (score >= highScore) {
-            highScore = score
+        mHighScore = getHighScore()
+        if (mScore >= mHighScore) {
+            mHighScore = mScore
             recordHighScore()
         }
-        score = 0
-        gameState = GAME_NORMAL
+        mScore = 0
+        mGameState = GAME_NORMAL
         addStartTiles()
-        mView.refreshLastTime = true
+        mView.mRefreshLastTime = true
         mView.resyncTime()
         mView.invalidate()
     }
@@ -52,15 +52,15 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
     }
 
     private fun addRandomTile() {
-        if (grid!!.isCellsAvailable) {
+        if (mGrid!!.isCellsAvailable) {
             val value = if (Math.random() < 0.9) 2 else 4
-            val tile = GridTiles(grid!!.randomAvailableCell()!!, value)
+            val tile = GridTiles(mGrid!!.randomAvailableCell()!!, value)
             spawnTile(tile)
         }
     }
 
     private fun spawnTile(tile: GridTiles) {
-        grid!!.insertTile(tile)
+        mGrid!!.insertTile(tile)
         aGrid!!.startAnimation(
             tile.x, tile.y, SPAWN_ANIMATION,
             SPAWN_ANIMATION_TIME, MOVE_ANIMATION_TIME, null
@@ -71,7 +71,7 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
         val rows: Int = PrimaryMenuActivity.rows
         val settings = PreferenceManager.getDefaultSharedPreferences(mContext)
         val editor = settings.edit()
-        editor.putLong(HIGH_SCORE + rows, highScore)
+        editor.putLong(HIGH_SCORE + rows, mHighScore)
         editor.apply()
     }
 
@@ -82,47 +82,47 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
     }
 
     private fun prepareTiles() {
-        for (array in grid!!.field) for (tile in array) if (grid!!.isCellOccupied(tile)) tile!!.mergedFrom =
+        for (array in mGrid!!.mField) for (tile in array) if (mGrid!!.isCellOccupied(tile)) tile!!.mMergedFrom =
             null
     }
 
     private fun moveTile(tile: GridTiles, cell: CellItem) {
-        grid!!.field[tile.x][tile.y] = null
-        grid!!.field[cell.x][cell.y] = tile
+        mGrid!!.mField[tile.x][tile.y] = null
+        mGrid!!.mField[cell.x][cell.y] = tile
         tile.updatePosition(cell)
     }
 
     private fun saveUndoState() {
-        grid!!.saveTiles()
-        canUndo = true
-        lastScore = bufferScore
-        lastGameState = bufferGameState
+        mGrid!!.saveTiles()
+        mCanUndo = true
+        mLastScore = bufferScore
+        mLastGameState = mBufferGameState
     }
 
     private fun prepareUndoState() {
-        grid!!.prepareSaveTiles()
-        bufferScore = score
-        bufferGameState = gameState
+        mGrid!!.prepareSaveTiles()
+        bufferScore = mScore
+        mBufferGameState = mGameState
     }
 
     fun revertUndoState() {
-        if (canUndo) {
-            canUndo = false
+        if (mCanUndo) {
+            mCanUndo = false
             aGrid!!.cancelAnimations()
-            grid!!.revertTiles()
-            score = lastScore
-            gameState = lastGameState
-            mView.refreshLastTime = true
+            mGrid!!.revertTiles()
+            mScore = mLastScore
+            mGameState = mLastGameState
+            mView.mRefreshLastTime = true
             mView.invalidate()
         }
     }
 
     fun gameWon(): Boolean {
-        return gameState > 0 && gameState % 2 != 0
+        return mGameState > 0 && mGameState % 2 != 0
     }
 
     fun gameLost(): Boolean {
-        return gameState == GAME_LOST
+        return mGameState == GAME_LOST
     }
 
     val isActive: Boolean
@@ -141,16 +141,16 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
         for (xx in traversalsX) {
             for (yy in traversalsY) {
                 val cell = CellItem(xx, yy)
-                val tile = grid!!.getCellContent(cell)
+                val tile = mGrid!!.getCellContent(cell)
                 if (tile != null) {
                     val positions = findFarthestPosition(cell, vector)
-                    val next = grid!!.getCellContent(positions[1])
-                    if (next != null && next.value == tile.value && next.mergedFrom == null) {
-                        val merged = GridTiles(positions[1], tile.value * 2)
+                    val next = mGrid!!.getCellContent(positions[1])
+                    if (next != null && next.mValue == tile.mValue && next.mMergedFrom == null) {
+                        val merged = GridTiles(positions[1], tile.mValue * 2)
                         val temp = arrayOf(tile, next)
-                        merged.mergedFrom = temp
-                        grid!!.insertTile(merged)
-                        grid!!.removeTile(tile)
+                        merged.mMergedFrom = temp
+                        mGrid!!.insertTile(merged)
+                        mGrid!!.removeTile(tile)
 
                         // Converge the two tiles' positions
                         tile.updatePosition(positions[1])
@@ -165,17 +165,17 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
                         )
 
                         // Update the score
-                        score = score + merged.value
-                        highScore = Math.max(score, highScore)
+                        mScore = mScore + merged.mValue
+                        mHighScore = Math.max(mScore, mHighScore)
 
                         // The mighty 2048 tile
-                        if (merged.value >= winValue() && !gameWon()) {
-                            gameState = gameState + GAME_WIN // Set win state
+                        if (merged.mValue >= winValue() && !gameWon()) {
+                            mGameState = mGameState + GAME_WIN // Set win state
                             endGame()
                         }
                         if (!PrimaryMenuActivity.mIsMainMenu) {
-                            if (merged.value >= 32) {
-                                PrimaryActivity.unlockAchievement(merged.value)
+                            if (merged.mValue >= 32) {
+                                PrimaryActivity.unlockAchievement(merged.mValue)
                             }
                         }
                     } else {
@@ -205,7 +205,7 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
 
     private fun checkLose() {
         if (!movesAvailable() && !gameWon()) {
-            gameState = GAME_LOST
+            mGameState = GAME_LOST
             endGame()
         }
     }
@@ -219,8 +219,8 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
             NOTIFICATION_DELAY_TIME,
             null
         )
-        if (score >= highScore) {
-            highScore = score
+        if (mScore >= mHighScore) {
+            mHighScore = mScore
             recordHighScore()
         }
     }
@@ -260,12 +260,12 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
                 previous.x + vector.x,
                 previous.y + vector.y
             )
-        } while (grid!!.isCellWithinBounds(nextCell) && grid!!.isCellAvailable(nextCell))
+        } while (mGrid!!.isCellWithinBounds(nextCell) && mGrid!!.isCellAvailable(nextCell))
         return arrayOf(previous, nextCell)
     }
 
     private fun movesAvailable(): Boolean {
-        return grid!!.isCellsAvailable || tileMatchesAvailable()
+        return mGrid!!.isCellsAvailable || tileMatchesAvailable()
     }
 
     private fun tileMatchesAvailable(): Boolean {
@@ -273,13 +273,13 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
         val rows: Int = PrimaryMenuActivity.rows
         for (xx in 0 until rows) {
             for (yy in 0 until rows) {
-                tile = grid!!.getCellContent(CellItem(xx, yy))
+                tile = mGrid!!.getCellContent(CellItem(xx, yy))
                 if (tile != null) {
                     for (direction in 0..3) {
                         val vector = getVector(direction)
                         val cell = CellItem(xx + vector.x, yy + vector.y)
-                        val other = grid!!.getCellContent(cell)
-                        if (other != null && other.value == tile.value) return true
+                        val other = mGrid!!.getCellContent(cell)
+                        if (other != null && other.mValue == tile.mValue) return true
                     }
                 }
             }
@@ -296,13 +296,13 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
     }
 
     fun setEndlessMode() {
-        gameState = GAME_ENDLESS
+        mGameState = GAME_ENDLESS
         mView.invalidate()
-        mView.refreshLastTime = true
+        mView.mRefreshLastTime = true
     }
 
     fun canContinue(): Boolean {
-        return !(gameState == GAME_ENDLESS || gameState == GAME_ENDLESS_WON)
+        return !(mGameState == GAME_ENDLESS || mGameState == GAME_ENDLESS_WON)
     }
 
     private fun customSaveLoadTemp() {
@@ -314,18 +314,18 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
         // Save() as "temp"
         val settings = PreferenceManager.getDefaultSharedPreferences(mContext)
         val editor = settings.edit()
-        val field = grid!!.field
+        val field = mGrid!!.mField
         editor.putInt(WIDTH, field.size)
         editor.putInt(HEIGHT, field.size)
         for (xx in field.indices) {
             for (yy in 0 until field[0].size) {
                 if (field[xx][yy] != null) {
-                    if (field[xx][yy]!!.value >= 2 && field[xx][yy]!!.value <= 32 && deleteAmount > 0) {
+                    if (field[xx][yy]!!.mValue >= 2 && field[xx][yy]!!.mValue <= 32 && deleteAmount > 0) {
                         deleteAmount--
                         editor.putInt(rows.toString() + " " + xx + " " + yy + "temp", 0)
                     } else editor.putInt(
                         rows.toString() + " " + xx + " " + yy + "temp",
-                        field[xx][yy]!!.value
+                        field[xx][yy]!!.mValue
                     )
                 } else editor.putInt(rows.toString() + " " + xx + " " + yy + "temp", 0)
             }
@@ -333,15 +333,15 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
         editor.apply()
 
         // Load() as "temp"
-        for (xx in grid!!.field.indices) {
-            for (yy in 0 until grid!!.field[0].size) {
+        for (xx in mGrid!!.mField.indices) {
+            for (yy in 0 until mGrid!!.mField[0].size) {
                 val value = settings.getInt(rows.toString() + " " + xx + " " + yy + "temp", -1)
-                if (value > 0) grid!!.field[xx][yy] =
-                    GridTiles(xx, yy, value) else if (value == 0) grid!!.field[xx][yy] = null
+                if (value > 0) mGrid!!.mField[xx][yy] =
+                    GridTiles(xx, yy, value) else if (value == 0) mGrid!!.mField[xx][yy] = null
             }
         }
-        canUndo = false
-        gameState = lastGameState
+        mCanUndo = false
+        mGameState = mLastGameState
     }
 
     fun makeToast(resId: Int) {
@@ -353,13 +353,13 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
         val cellCount = rows * rows - (rows + 2)
         if (mContext.javaClass == ColorPlatActivity::class.java) // because of color picker
         {
-            if (mView.game.grid!!.getAvailableCells().size < cellCount) {
+            if (mView.mGame.mGrid!!.getAvailableCells().size < cellCount) {
                 customSaveLoadTemp()
                 mView.invalidate()
-            } else mView.game.makeToast(R.string.tiles_are_not_enough_to_remove)
+            } else mView.mGame.makeToast(R.string.tiles_are_not_enough_to_remove)
         } else {
             if (PrimaryActivity.mRewardDeletes > 0) {
-                if (mView.game.grid!!.getAvailableCells().size < cellCount) {
+                if (mView.mGame.mGrid!!.getAvailableCells().size < cellCount) {
                     AlertDialog.Builder(mView.context)
                         .setPositiveButton(R.string.yes_delete_tiles) { dialog, which ->
                             PrimaryActivity.mRewardDeletes-- // decrease rewards
@@ -370,19 +370,19 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
                         .setTitle(R.string.trash_dialog_title)
                         .setMessage(R.string.trash_dialog_message)
                         .show()
-                } else mView.game.makeToast(R.string.tiles_are_not_enough_to_remove)
-            } else mView.game.makeToast(R.string.reward_amount_error)
+                } else mView.mGame.makeToast(R.string.tiles_are_not_enough_to_remove)
+            } else mView.mGame.makeToast(R.string.reward_amount_error)
         }
     }
 
     fun loadCurrentBoard() {
         //Stopping all animations
-        mView.game.aGrid!!.cancelAnimations()
+        mView.mGame.aGrid!!.cancelAnimations()
         val settings = PreferenceManager.getDefaultSharedPreferences(mContext)
         val rows: Int = PrimaryMenuActivity.rows
         if (!settings.getBoolean("has_snapshot$rows", false)) {
             // if we haven't any snapshot already, so we better don't loading anything
-            mView.game.makeToast(R.string.loading_failed)
+            mView.mGame.makeToast(R.string.loading_failed)
             return
         }
         val CURRENT_STATE = "cs"
@@ -393,33 +393,33 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
         val CAN_UNDO = "can undo$rows$CURRENT_STATE"
         val GAME_STATE = "game state$rows$CURRENT_STATE"
         val UNDO_GAME_STATE = "undo game state$rows$CURRENT_STATE"
-        for (xx in mView.game.grid!!.field.indices) {
-            for (yy in 0 until mView.game.grid!!.field[0].size) {
+        for (xx in mView.mGame.mGrid!!.mField.indices) {
+            for (yy in 0 until mView.mGame.mGrid!!.mField[0].size) {
                 val value = settings.getInt("$CURRENT_STATE$rows $xx $yy", -1)
-                if (value > 0) mView.game.grid!!.field[xx][yy] =
-                    GridTiles(xx, yy, value) else if (value == 0) mView.game.grid!!.field[xx][yy] = null
+                if (value > 0) mView.mGame.mGrid!!.mField[xx][yy] =
+                    GridTiles(xx, yy, value) else if (value == 0) mView.mGame.mGrid!!.mField[xx][yy] = null
                 val undoValue = settings.getInt("$UNDO_GRID$rows $xx $yy", -1)
-                if (undoValue > 0) mView.game.grid!!.undoField[xx][yy] = GridTiles(
+                if (undoValue > 0) mView.mGame.mGrid!!.mUndoField[xx][yy] = GridTiles(
                     xx,
                     yy,
                     undoValue
-                ) else if (value == 0) mView.game.grid!!.undoField[xx][yy] = null
+                ) else if (value == 0) mView.mGame.mGrid!!.mUndoField[xx][yy] = null
             }
         }
         PrimaryActivity.mRewardDeletes = settings.getInt(REWARD_DELETES, 2)
-        mView.game.score = settings.getLong(SCORE, mView.game.score)
-        mView.game.highScore = settings.getLong(HIGH_SCORE, mView.game.highScore)
-        mView.game.lastScore = settings.getLong(UNDO_SCORE, mView.game.lastScore)
-        mView.game.canUndo = settings.getBoolean(CAN_UNDO, mView.game.canUndo)
-        mView.game.gameState = settings.getInt(GAME_STATE, mView.game.gameState)
-        mView.game.lastGameState = settings.getInt(UNDO_GAME_STATE, mView.game.lastGameState)
+        mView.mGame.mScore = settings.getLong(SCORE, mView.mGame.mScore)
+        mView.mGame.mHighScore = settings.getLong(HIGH_SCORE, mView.mGame.mHighScore)
+        mView.mGame.mLastScore = settings.getLong(UNDO_SCORE, mView.mGame.mLastScore)
+        mView.mGame.mCanUndo = settings.getBoolean(CAN_UNDO, mView.mGame.mCanUndo)
+        mView.mGame.mGameState = settings.getInt(GAME_STATE, mView.mGame.mGameState)
+        mView.mGame.mLastGameState = settings.getInt(UNDO_GAME_STATE, mView.mGame.mLastGameState)
         mView.invalidate()
-        mView.game.makeToast(R.string.loaded)
+        mView.mGame.makeToast(R.string.loaded)
     }
 
     fun saveCurrentBoard() {
-        if (!mView.game.isActive) {
-            mView.game.makeToast(R.string.message_unable_saving_on_game_over)
+        if (!mView.mGame.isActive) {
+            mView.mGame.makeToast(R.string.message_unable_saving_on_game_over)
             return
         }
         val rows: Int = PrimaryMenuActivity.rows
@@ -435,21 +435,21 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
         val UNDO_GAME_STATE = "undo game state$rows$CURRENT_STATE"
         val settings = PreferenceManager.getDefaultSharedPreferences(mContext)
         val editor = settings.edit()
-        val field = mView.game.grid!!.field
-        val undoField = mView.game.grid!!.undoField
+        val field = mView.mGame.mGrid!!.mField
+        val undoField = mView.mGame.mGrid!!.mUndoField
         editor.putInt(WIDTH, field.size)
         editor.putInt(HEIGHT, field.size)
         for (xx in field.indices) {
             for (yy in 0 until field[0].size) {
                 if (field[xx][yy] != null) editor.putInt(
                     "$CURRENT_STATE$rows $xx $yy",
-                    field[xx][yy]!!.value
+                    field[xx][yy]!!.mValue
                 ) else editor.putInt(
                     "$CURRENT_STATE$rows $xx $yy", 0
                 )
                 if (undoField[xx][yy] != null) editor.putInt(
                     "$UNDO_GRID$rows $xx $yy",
-                    undoField[xx][yy]!!.value
+                    undoField[xx][yy]!!.mValue
                 ) else editor.putInt(
                     "$UNDO_GRID$rows $xx $yy", 0
                 )
@@ -460,14 +460,14 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
         editor.putInt(REWARD_DELETES, PrimaryActivity.mRewardDeletes)
 
         // game values:
-        editor.putLong(SCORE, mView.game.score)
-        editor.putLong(UNDO_SCORE, mView.game.lastScore)
-        editor.putBoolean(CAN_UNDO, mView.game.canUndo)
-        editor.putInt(GAME_STATE, mView.game.gameState)
-        editor.putInt(UNDO_GAME_STATE, mView.game.lastGameState)
+        editor.putLong(SCORE, mView.mGame.mScore)
+        editor.putLong(UNDO_SCORE, mView.mGame.mLastScore)
+        editor.putBoolean(CAN_UNDO, mView.mGame.mCanUndo)
+        editor.putInt(GAME_STATE, mView.mGame.mGameState)
+        editor.putInt(UNDO_GAME_STATE, mView.mGame.mLastGameState)
         editor.putBoolean("has_snapshot$rows", true) // important
         editor.apply()
-        mView.game.makeToast(R.string.saved)
+        mView.mGame.makeToast(R.string.saved)
     }
 
     companion object {
@@ -475,10 +475,10 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
         const val MOVE_ANIMATION = 0
         const val MERGE_ANIMATION = 1
         const val FADE_GLOBAL_ANIMATION = 0
-        private const val MOVE_ANIMATION_TIME = MainView.BASE_ANIMATION_TIME.toLong()
-        private const val SPAWN_ANIMATION_TIME = MainView.BASE_ANIMATION_TIME.toLong()
+        private const val MOVE_ANIMATION_TIME = PrimaryView.BASE_ANIMATION_TIME.toLong()
+        private const val SPAWN_ANIMATION_TIME = PrimaryView.BASE_ANIMATION_TIME.toLong()
         private const val NOTIFICATION_DELAY_TIME = MOVE_ANIMATION_TIME + SPAWN_ANIMATION_TIME
-        private const val NOTIFICATION_ANIMATION_TIME = (MainView.BASE_ANIMATION_TIME * 5).toLong()
+        private const val NOTIFICATION_ANIMATION_TIME = (PrimaryView.BASE_ANIMATION_TIME * 5).toLong()
         private const val startingMaxValue = 2048
 
         //Odd state = game is not active
@@ -494,7 +494,7 @@ class PrimaryGame(private val mContext: Context, private val mView: MainView) {
     }
 
     init {
-        endingMaxValue = Math.pow(2.0, (mView.numCellTypes - 1).toDouble())
+        endingMaxValue = Math.pow(2.0, (mView.mNumCellTypes - 1).toDouble())
             .toInt()
     }
 }
