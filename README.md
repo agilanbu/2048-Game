@@ -1,5 +1,5 @@
 # 2048 Game Android Kotlin  
-initial commit
+2048 game in native platform using kotlin language. 
 
 # 2048 Android (Kotlin version)
 This game is planned to be published in google play store as soon. Now I am publishing the full source code of this game with any permission. Just have fun and enjoy ;)
